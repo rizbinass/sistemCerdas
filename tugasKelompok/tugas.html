@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forward Chaining Kredit Bank</title>
+</head>
+<body>
+
+  <h2>Penentuan Kelayakan Kredit Bank</h2>
+
+  <label>Skor Kredit:</label>
+  <input type="number" id="skorKredit">
+  <br><br>
+
+  <label>Riwayat Tunggakan:</label>
+  <select id="riwayatTunggakan">
+    <option value="0">Tidak Ada</option>
+    <option value="1">Ada</option>
+  </select>
+  <br><br>
+
+  <label>Penghasilan Tetap:</label>
+  <select id="penghasilanTetap">
+    <option value="true">Ya</option>
+    <option value="false">Tidak</option>
+  </select>
+  <br><br>
+
+  <label>Status Pekerjaan:</label>
+  <select id="statusPekerjaan">
+    <option value="tetap">Tetap</option>
+    <option value="kontrak">Kontrak</option>
+  </select>
+  <br><br>
+
+  <label>Tabungan Aktif:</label>
+  <select id="tabunganAktif">
+    <option value="true">Ya</option>
+    <option value="false">Tidak</option>
+  </select>
+  <br><br>
+
+  <button onclick="cekKredit()">
+    Cek Kelayakan Kredit
+  </button>
+
+  <h3 id="hasil"></h3>
+
+  <script>
+
+    function cekKredit() {
+
+      // Fakta awal
+      let skorKredit =
+        parseInt(document.getElementById("skorKredit").value);
+
+      let riwayatTunggakan =
+        document.getElementById("riwayatTunggakan").value;
+
+      let penghasilanTetap =
+        document.getElementById("penghasilanTetap").value === "true";
+
+      let statusPekerjaan =
+        document.getElementById("statusPekerjaan").value;
+
+      let tabunganAktif =
+        document.getElementById("tabunganAktif").value === "true";
+
+
+      // R1
+      let nasabahTerpercaya =
+        skorKredit >= 700;
+
+      // R2
+      let disiplinMembayar =
+        riwayatTunggakan == 0;
+
+      // R3
+      let kemampuanFinansialBaik =
+        penghasilanTetap;
+
+      // R4
+      let pendapatanStabil =
+        statusPekerjaan === "tetap";
+
+      // R5
+      let cadanganDanaAman =
+        tabunganAktif;
+
+
+      // R6
+      let kategoriLowRisk =
+        nasabahTerpercaya &&
+        disiplinMembayar;
+
+      // R7
+      let kondisiEkonomiStabil =
+        kemampuanFinansialBaik &&
+        pendapatanStabil;
+
+      // R8
+      let kemampuanBayarTinggi =
+        kondisiEkonomiStabil &&
+        cadanganDanaAman;
+
+      // R9
+      let nasabahLayakKredit =
+        kategoriLowRisk &&
+        kemampuanBayarTinggi;
+
+      // R10
+      let kreditDisetujui =
+        nasabahLayakKredit;
+
+
+      // Output
+      if (kreditDisetujui) {
+        document.getElementById("hasil").innerHTML =
+          "Kredit Disetujui";
+      } else {
+        document.getElementById("hasil").innerHTML =
+          "Kredit Ditolak";
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
