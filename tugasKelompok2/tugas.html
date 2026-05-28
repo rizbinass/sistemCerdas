@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<h2>Program Backward Chaining Kredit</h2>
+<h2>Backward Chaining Kredit</h2>
 
 <button onclick="proses()">Proses</button>
 
@@ -21,78 +21,92 @@ function proses(){
     var status_pekerjaan = true;
     var tabungan_aktif = true;
 
-    var nasabah_terpercaya = false;
-    var disiplin_membayar = false;
-    var kemampuan_finansial_baik = false;
-    var pendapatan_stabil = false;
-    var cadangan_dana_aman = false;
-    var kategori_low_risk = false;
-    var kondisi_ekonomi_stabil = false;
-    var kemampuan_bayar_tinggi = false;
-    var nasabah_layak_kredit = false;
-    var kredit_disetujui = false;
-
     var text = "";
 
     text += "Goal : kredit_disetujui <br><br>";
 
-    if(skor_kredit == true){
-        nasabah_terpercaya = true;
-        text += "R1 TRUE = nasabah_terpercaya <br>";
-    }
+    text += "Cari kredit_disetujui... <br>";
+    
+    var nasabah_layak_kredit = false;
 
-    if(riwayat_tunggakan == true){
-        disiplin_membayar = true;
-        text += "R2 TRUE = disiplin_membayar <br>";
-    }
+    text += "Butuh nasabah_layak_kredit <br><br>";
 
-    if(nasabah_terpercaya == true && disiplin_membayar == true){
+
+
+    var kategori_low_risk = false;
+    var kemampuan_bayar_tinggi = false;
+
+    text += "Cari kategori_low_risk... <br>";
+
+    if(skor_kredit == true && riwayat_tunggakan == true){
+
         kategori_low_risk = true;
-        text += "R6 TRUE = kategori_low_risk <br>";
+
+        text += "skor_kredit di atas 700 = TRUE <br>";
+        text += "riwayat_tunggakan nol = TRUE <br>";
+        text += "kategori_low_risk = TRUE <br><br>";
+
     }
 
-    if(penghasilan_tetap == true){
-        kemampuan_finansial_baik = true;
-        text += "R3 TRUE = kemampuan_finansial_baik <br>";
-    }
 
-    if(status_pekerjaan == true){
-        pendapatan_stabil = true;
-        text += "R4 TRUE = pendapatan_stabil <br>";
-    }
 
-    if(kemampuan_finansial_baik == true && pendapatan_stabil == true){
+    text += "Cari kemampuan_bayar_tinggi... <br>";
+
+    var kondisi_ekonomi_stabil = false;
+    var cadangan_dana_aman = false;
+
+    if(penghasilan_tetap == true && status_pekerjaan == true){
+
         kondisi_ekonomi_stabil = true;
-        text += "R7 TRUE = kondisi_ekonomi_stabil <br>";
+
+        text += "penghasilan_tetap = TRUE <br>";
+        text += "status_pekerjaan tetap = TRUE <br>";
+        text += "kondisi_ekonomi_stabil = TRUE <br><br>";
+
     }
 
     if(tabungan_aktif == true){
+
         cadangan_dana_aman = true;
-        text += "R5 TRUE = cadangan_dana_aman <br>";
+
+        text += "tabungan_aktif tersedia = TRUE <br>";
+        text += "cadangan_dana_aman = TRUE <br><br>";
+
     }
 
     if(kondisi_ekonomi_stabil == true && cadangan_dana_aman == true){
+
         kemampuan_bayar_tinggi = true;
-        text += "R8 TRUE = kemampuan_bayar_tinggi <br>";
+
+        text += "kemampuan_bayar_tinggi = TRUE <br><br>";
+
     }
+
+
 
     if(kategori_low_risk == true && kemampuan_bayar_tinggi == true){
+
         nasabah_layak_kredit = true;
-        text += "R9 TRUE = nasabah_layak_kredit <br>";
+
+        text += "nasabah_layak_kredit = TRUE <br><br>";
+
     }
+
+
 
     if(nasabah_layak_kredit == true){
-        kredit_disetujui = true;
-        text += "R10 TRUE = kredit_disetujui <br><br>";
-    }
 
-    if(kredit_disetujui == true){
+        text += "kredit_disetujui = TRUE <br><br>";
         text += "HASIL : KREDIT DISETUJUI";
+
     }else{
+
         text += "HASIL : KREDIT DITOLAK";
+
     }
 
     document.getElementById("hasil").innerHTML = text;
+
 }
 
 </script>
