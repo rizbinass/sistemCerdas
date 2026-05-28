@@ -1,115 +1,204 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Backward Chaining</title>
+    <meta charset="UTF-8">
+    <title>Backward Chaining Kredit</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container{
+            width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: auto;
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        .form-group{
+            margin-bottom: 15px;
+        }
+
+        label{
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select{
+            width: 100%;
+            padding: 8px;
+        }
+
+        button{
+            width: 100%;
+            padding: 10px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #hasil{
+            margin-top: 20px;
+            background: #eee;
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Backward Chaining Kredit</h2>
+<div class="container">
 
-<button onclick="proses()">Proses</button>
+    <h2>Sistem Backward Chaining Kredit</h2>
 
-<p id="hasil"></p>
+    <div class="form-group">
+        <label>Skor Kredit</label>
+        <input type="number" id="skor_kredit">
+    </div>
+
+    <div class="form-group">
+        <label>Riwayat Tunggakan</label>
+        <select id="riwayat_tunggakan">
+            <option value="nol">Nol</option>
+            <option value="ada">Ada</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Penghasilan Tetap</label>
+        <select id="penghasilan_tetap">
+            <option value="true">Ya</option>
+            <option value="false">Tidak</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Status Pekerjaan</label>
+        <select id="status_pekerjaan">
+            <option value="tetap">Tetap</option>
+            <option value="kontrak">Kontrak</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Tabungan Aktif</label>
+        <select id="tabungan_aktif">
+            <option value="true">Tersedia</option>
+            <option value="false">Tidak Ada</option>
+        </select>
+    </div>
+
+    <button onclick="prosesBackwardChaining()">
+        Proses Decision
+    </button>
+
+    <div id="hasil"></div>
+
+</div>
 
 <script>
 
-function proses(){
+function prosesBackwardChaining(){
 
-    var skor_kredit = true;
-    var riwayat_tunggakan = true;
-    var penghasilan_tetap = true;
-    var status_pekerjaan = true;
-    var tabungan_aktif = true;
+    // INPUT USER
+    let skor_kredit = parseInt(document.getElementById("skor_kredit").value);
+    let riwayat_tunggakan = document.getElementById("riwayat_tunggakan").value;
+    let penghasilan_tetap = document.getElementById("penghasilan_tetap").value;
+    let status_pekerjaan = document.getElementById("status_pekerjaan").value;
+    let tabungan_aktif = document.getElementById("tabungan_aktif").value;
 
-    var text = "";
+    let hasil = "";
 
-    text += "Goal : kredit_disetujui <br><br>";
-
-    text += "Cari kredit_disetujui... <br>";
-    
-    var nasabah_layak_kredit = false;
-
-    text += "Butuh nasabah_layak_kredit <br><br>";
-
-
-
-    var kategori_low_risk = false;
-    var kemampuan_bayar_tinggi = false;
-
-    text += "Cari kategori_low_risk... <br>";
-
-    if(skor_kredit == true && riwayat_tunggakan == true){
-
-        kategori_low_risk = true;
-
-        text += "skor_kredit di atas 700 = TRUE <br>";
-        text += "riwayat_tunggakan nol = TRUE <br>";
-        text += "kategori_low_risk = TRUE <br><br>";
-
+    // R1
+    let nasabah_terpercaya = false;
+    if(skor_kredit > 700){
+        nasabah_terpercaya = true;
+        hasil += "R1 TRUE : skor_kredit di atas 700 → nasabah_terpercaya<br>";
     }
 
-
-
-    text += "Cari kemampuan_bayar_tinggi... <br>";
-
-    var kondisi_ekonomi_stabil = false;
-    var cadangan_dana_aman = false;
-
-    if(penghasilan_tetap == true && status_pekerjaan == true){
-
-        kondisi_ekonomi_stabil = true;
-
-        text += "penghasilan_tetap = TRUE <br>";
-        text += "status_pekerjaan tetap = TRUE <br>";
-        text += "kondisi_ekonomi_stabil = TRUE <br><br>";
-
+    // R2
+    let disiplin_membayar = false;
+    if(riwayat_tunggakan == "nol"){
+        disiplin_membayar = true;
+        hasil += "R2 TRUE : riwayat_tunggakan nol → disiplin_membayar<br>";
     }
 
-    if(tabungan_aktif == true){
+    // R3
+    let kemampuan_finansial_baik = false;
+    if(penghasilan_tetap == "true"){
+        kemampuan_finansial_baik = true;
+        hasil += "R3 TRUE : penghasilan_tetap → kemampuan_finansial_baik<br>";
+    }
 
+    // R4
+    let pendapatan_stabil = false;
+    if(status_pekerjaan == "tetap"){
+        pendapatan_stabil = true;
+        hasil += "R4 TRUE : status_pekerjaan tetap → pendapatan_stabil<br>";
+    }
+
+    // R5
+    let cadangan_dana_aman = false;
+    if(tabungan_aktif == "true"){
         cadangan_dana_aman = true;
-
-        text += "tabungan_aktif tersedia = TRUE <br>";
-        text += "cadangan_dana_aman = TRUE <br><br>";
-
+        hasil += "R5 TRUE : tabungan_aktif tersedia → cadangan_dana_aman<br>";
     }
 
-    if(kondisi_ekonomi_stabil == true && cadangan_dana_aman == true){
+    // R6
+    let kategori_low_risk = false;
+    if(nasabah_terpercaya && disiplin_membayar){
+        kategori_low_risk = true;
+        hasil += "R6 TRUE : nasabah_terpercaya AND disiplin_membayar → kategori_low_risk<br>";
+    }
 
+    // R7
+    let kondisi_ekonomi_stabil = false;
+    if(kemampuan_finansial_baik && pendapatan_stabil){
+        kondisi_ekonomi_stabil = true;
+        hasil += "R7 TRUE : kemampuan_finansial_baik AND pendapatan_stabil → kondisi_ekonomi_stabil<br>";
+    }
+
+    // R8
+    let kemampuan_bayar_tinggi = false;
+    if(kondisi_ekonomi_stabil && cadangan_dana_aman){
         kemampuan_bayar_tinggi = true;
-
-        text += "kemampuan_bayar_tinggi = TRUE <br><br>";
-
+        hasil += "R8 TRUE : kondisi_ekonomi_stabil AND cadangan_dana_aman → kemampuan_bayar_tinggi<br>";
     }
 
-
-
-    if(kategori_low_risk == true && kemampuan_bayar_tinggi == true){
-
+    // R9
+    let nasabah_layak_kredit = false;
+    if(kategori_low_risk && kemampuan_bayar_tinggi){
         nasabah_layak_kredit = true;
-
-        text += "nasabah_layak_kredit = TRUE <br><br>";
-
+        hasil += "R9 TRUE : kategori_low_risk AND kemampuan_bayar_tinggi → nasabah_layak_kredit<br>";
     }
 
+    // R10
+    let kredit_disetujui = false;
+    if(nasabah_layak_kredit){
+        kredit_disetujui = true;
+        hasil += "R10 TRUE : nasabah_layak_kredit → kredit_disetujui<br>";
+    }
 
+    hasil += "<hr>";
 
-    if(nasabah_layak_kredit == true){
-
-        text += "kredit_disetujui = TRUE <br><br>";
-        text += "HASIL : KREDIT DISETUJUI";
-
+    if(kredit_disetujui){
+        hasil += "<h3>KREDIT DISETUJUI</h3>";
     }else{
-
-        text += "HASIL : KREDIT DITOLAK";
-
+        hasil += "<h3>KREDIT DITOLAK</h3>";
     }
 
-    document.getElementById("hasil").innerHTML = text;
-
+    document.getElementById("hasil").innerHTML = hasil;
 }
 
-</script>
+</script>   
 
 </body>
 </html>
