@@ -3,129 +3,230 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forward Chaining Kredit Bank</title>
-</head>
-<body>
-
-  <h2>Penentuan Kelayakan Kredit Bank</h2>
-
-  <label>Skor Kredit:</label>
-  <input type="number" id="skorKredit">
-  <br><br>
-
-  <label>Riwayat Tunggakan:</label>
-  <select id="riwayatTunggakan">
-    <option value="0">Tidak Ada</option>
-    <option value="1">Ada</option>
-  </select>
-  <br><br>
-
-  <label>Penghasilan Tetap:</label>
-  <select id="penghasilanTetap">
-    <option value="true">Ya</option>
-    <option value="false">Tidak</option>
-  </select>
-  <br><br>
-
-  <label>Status Pekerjaan:</label>
-  <select id="statusPekerjaan">
-    <option value="tetap">Tetap</option>
-    <option value="kontrak">Kontrak</option>
-  </select>
-  <br><br>
-
-  <label>Tabungan Aktif:</label>
-  <select id="tabunganAktif">
-    <option value="true">Ya</option>
-    <option value="false">Tidak</option>
-  </select>
-  <br><br>
-
-  <button onclick="cekKredit()">
-    Cek Kelayakan Kredit
-  </button>
-
-  <h3 id="hasil"></h3>
-
-  <script>
-
-    function cekKredit() {
-
-      // Fakta awal
-      let skorKredit =
-        parseInt(document.getElementById("skorKredit").value);
-
-      let riwayatTunggakan =
-        document.getElementById("riwayatTunggakan").value;
-
-      let penghasilanTetap =
-        document.getElementById("penghasilanTetap").value === "true";
-
-      let statusPekerjaan =
-        document.getElementById("statusPekerjaan").value;
-
-      let tabunganAktif =
-        document.getElementById("tabunganAktif").value === "true";
-
-
-      // R1
-      let nasabahTerpercaya =
-        skorKredit >= 700;
-
-      // R2
-      let disiplinMembayar =
-        riwayatTunggakan == 0;
-
-      // R3
-      let kemampuanFinansialBaik =
-        penghasilanTetap;
-
-      // R4
-      let pendapatanStabil =
-        statusPekerjaan === "tetap";
-
-      // R5
-      let cadanganDanaAman =
-        tabunganAktif;
-
-
-      // R6
-      let kategoriLowRisk =
-        nasabahTerpercaya &&
-        disiplinMembayar;
-
-      // R7
-      let kondisiEkonomiStabil =
-        kemampuanFinansialBaik &&
-        pendapatanStabil;
-
-      // R8
-      let kemampuanBayarTinggi =
-        kondisiEkonomiStabil &&
-        cadanganDanaAman;
-
-      // R9
-      let nasabahLayakKredit =
-        kategoriLowRisk &&
-        kemampuanBayarTinggi;
-
-      // R10
-      let kreditDisetujui =
-        nasabahLayakKredit;
-
-
-      // Output
-      if (kreditDisetujui) {
-        document.getElementById("hasil").innerHTML =
-          "Kredit Disetujui";
-      } else {
-        document.getElementById("hasil").innerHTML =
-          "Kredit Ditolak";
-      }
-
+  <title>Kelayakan Kredit Bank Forward Chaining</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-  </script>
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
+    .container {
+      width: 100%;
+      max-width: 560px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      padding: 32px;
+    }
+
+    h1 {
+      font-size: 26px;
+      line-height: 1.3;
+      color: #111827;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      font-size: 15px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #111827;
+      font-size: 15px;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+    }
+
+    button {
+      width: 100%;
+      min-height: 46px;
+      border: 0;
+      border-radius: 6px;
+      background: #2563eb;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 8px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #hasil {
+      min-height: 52px;
+      margin-top: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      background: #f9fafb;
+      color: #6b7280;
+      border: 1px dashed #d1d5db;
+      text-align: center;
+      padding: 12px;
+    }
+
+    #hasil.disetujui {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    #hasil.ditolak {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 16px;
+      }
+
+      .container {
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Kelayakan Kredit Bank</h1>
+    <p class="subtitle">Sistem sederhana dengan metode forward chaining.</p>
+
+    <div class="form-group">
+      <label for="skorKredit">Skor Kredit</label>
+      <input type="number" id="skorKredit" placeholder="Contoh: 720" min="0">
+    </div>
+
+    <div class="form-group">
+      <label for="riwayatTunggakan">Riwayat Tunggakan</label>
+      <select id="riwayatTunggakan">
+        <option value="0">Tidak Ada</option>
+        <option value="1">Ada</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="penghasilanTetap">Penghasilan Tetap</label>
+      <select id="penghasilanTetap">
+        <option value="true">Ya</option>
+        <option value="false">Tidak</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="statusPekerjaan">Status Pekerjaan</label>
+      <select id="statusPekerjaan">
+        <option value="tetap">Tetap</option>
+        <option value="kontrak">Kontrak</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="tabunganAktif">Tabungan Aktif</label>
+      <select id="tabunganAktif">
+        <option value="true">Ya</option>
+        <option value="false">Tidak</option>
+      </select>
+    </div>
+
+    <button type="button" onclick="cekKredit()">Cek Kelayakan Kredit</button>
+
+    <h2 id="hasil">Hasil akan muncul di sini</h2>
+  </main>
+
+  <script>
+    function cekKredit() {
+      const skorKredit = parseInt(document.getElementById("skorKredit").value);
+      const riwayatTunggakan = document.getElementById("riwayatTunggakan").value;
+      const penghasilanTetap = document.getElementById("penghasilanTetap").value === "true";
+      const statusPekerjaan = document.getElementById("statusPekerjaan").value;
+      const tabunganAktif = document.getElementById("tabunganAktif").value === "true";
+      const hasil = document.getElementById("hasil");
+
+      if (Number.isNaN(skorKredit)) {
+        hasil.textContent = "Masukkan skor kredit terlebih dahulu";
+        hasil.className = "ditolak";
+        return;
+      }
+
+      const nasabahTerpercaya = skorKredit >= 700;
+      const disiplinMembayar = riwayatTunggakan == 0;
+      const kemampuanFinansialBaik = penghasilanTetap;
+      const pendapatanStabil = statusPekerjaan === "tetap";
+      const cadanganDanaAman = tabunganAktif;
+
+      const kategoriLowRisk = nasabahTerpercaya && disiplinMembayar;
+      const kondisiEkonomiStabil = kemampuanFinansialBaik && pendapatanStabil;
+      const kemampuanBayarTinggi = kondisiEkonomiStabil && cadanganDanaAman;
+      const nasabahLayakKredit = kategoriLowRisk && kemampuanBayarTinggi;
+      const kreditDisetujui = nasabahLayakKredit;
+
+      if (kreditDisetujui) {
+        hasil.textContent = "Kredit Disetujui";
+        hasil.className = "disetujui";
+      } else {
+        hasil.textContent = "Kredit Ditolak";
+        hasil.className = "ditolak";
+      }
+    }
+  </script>
 </body>
 </html>
